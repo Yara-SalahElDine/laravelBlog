@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
-use App\Http\Controllers\controller;
+use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Post;
 use App\User;
-
+use App\Http\Resources\PostResource;
+use App\Http\Requests\StorePostRequest;
 
 
 
@@ -16,7 +17,14 @@ class PostsController extends Controller
 {
     public function index()
     {
-
+        $posts = Post::paginate(3);        
+        return PostResource::collection($posts);
     
+    }
+
+    public function store(StorePostRequest $request)
+    {
+        $post = Post::create($request->all());
+        return new PostResource($post);
     }
 }
